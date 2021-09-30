@@ -50,3 +50,89 @@ export const decNumber = () => {
     }
 }
 ```
+
+### `Create directory name reducers (index.js)`
+
+Below code will be in index.js under reducers directory
+
+```bash
+import changeTheNumber from './upDown';
+import { combineReducers } from 'redux';
+
+const rootReducer = combineReducers({
+    changeTheNumber
+})
+
+export default rootReducer;
+```
+
+create one more file name upDown.js under reducers directory and paste the following
+
+```bash
+const initialState = 0;
+
+const changeTheNumber = (state = initialState, action) => {
+    switch(action.type){
+        case "INCREMENT": return state + 1;
+        case "DECREMENT": return state - 1;
+        default: return state;
+    }
+}
+
+export default changeTheNumber;
+```
+
+### `Create a file name store.js`
+
+```bash
+import { createStore } from "redux";
+import rootReducer from './reducers/index';
+const store = createStore(rootReducer);
+export default store;
+```
+
+### `Create a file name index.js`
+
+```bash
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+import store from "./store";
+import {Provider} from "react-redux";
+
+ReactDOM.render(
+  <React.StrictMode>
+    <Provider store={store}>
+    <App />
+    </Provider>
+  </React.StrictMode>,
+  document.getElementById('root')
+);
+reportWebVitals();
+
+```
+
+
+
+### `Create a file name app.js`
+
+```bash
+import {useSelector, useDispatch} from "react-redux";
+import {incNumber, decNumber} from "./actions/index";
+
+function App() {
+
+  const myState = useSelector((state) => state.changeTheNumber);
+  const dispatch = useDispatch();
+
+  return (
+    <div className="App">
+      <a onClick={() => dispatch(decNumber())}>Decrement</a>
+      <input type="text" name="quantity" value={myState} />
+      <a onClick={() => dispatch(incNumber())}>Increment</a>
+    </div>
+  );
+}
+export default App;
+```
